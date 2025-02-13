@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace Listings</title>
+  <style>
+    body {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        font-family: "Arial", sans-serif;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 40px;
+        min-height: 100vh;
+    }
+
+    .workspace-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        width: 320px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .workspace-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 22px;
+    }
+
+    .availability {
+        font-weight: bold;
+        color: #fff;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        display: inline-block;
+        width: 120px;
+        text-transform: uppercase;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 12px;
+        width: 100%;
+        margin-top: 10px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+    }
+
+    .details-link {
+        background: #007BFF;
+        color: white;
+        border: 2px solid #007BFF;
+    }
+
+    .details-link:hover {
+        background: white;
+        color: #007BFF;
+        transform: scale(1.05);
+    }
+
+    .reserve-button {
+        background: #28a745;
+        color: white;
+        border: 2px solid #28a745;
+    }
+
+    .reserve-button:hover {
+        background: white;
+        color: #28a745;
+        transform: scale(1.05);
+    }
+
+    .back-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .back-link {
+        background: white;
+        color: #007BFF;
+        text-align: center;
+        padding: 12px 20px;
+        font-weight: bold;
+        text-decoration: none;
+        border: 2px solid #007BFF;
+        border-radius: 6px;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
+        font-size: 16px;
+    }
+
+    .back-link:hover {
+        background: #007BFF;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    form {
+        margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div th:if="${message}" class="no-spaces-message">
+  <p th:text="${message}"></p>
+</div>
+
+<div th:each="space : ${spaces}" class="workspace-card" th:if="${spaces}">
+  <h2 th:text="${space.type}"></h2>
+
+  <p class="availability"
+     th:text="${space.availabilityStatus} ? 'Available' : 'Unavailable'"
+     th:style="${space.availabilityStatus} ? 'background: green;' : 'background: red;'">
+  </p>
+  <p class="details">
+    Price: <strong th:text="${space.price}"></strong>
+  </p>
+
+  <p class="details">
+    Type: <strong th:text="${space.type}"></strong>
+  </p>
+
+  <img th:src="@{/spacephoto/{spaceId}(spaceId=${space.workspaceId})}" alt="Workspace Image">
+
+  <form method="POST" th:action="@{/reserve/{spaceId}(spaceId=${space.workspaceId})}">
+    <button type="submit" class="button reserve-button">Make Reservation</button>
+  </form>
+</div>
+
+<a href="/login" class="back-link">Exit</a>
+<a href="/my-reservation" class="back-link">My Reservations</a>
+</body>
+
+</html>

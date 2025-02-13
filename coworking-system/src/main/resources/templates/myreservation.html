@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Reservation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .workspace-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            text-align: center;
+        }
+        .workspace-card h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .availability {
+            color: white;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .details {
+            color: #555;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .workspace-card img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .delete-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        display: block;
+        width: 100%;
+        max-width: 200px;
+        margin: 10px auto;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .delete-btn:hover {
+        background-color: #c82333;
+        transform: scale(1.05);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .delete-btn:active {
+        transform: scale(0.95);
+    }
+        .back-link {
+            margin-top: 30px;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            background-color: white;
+            color: #667eea;
+        }
+        .no-spaces-message{
+        margin-bottom:50px;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${message}" class="no-spaces-message">
+    <p th:text="${message}"></p>
+</div>
+<div class="workspace-card" th:if="${reservation}">
+    <h2 th:text="${reservation.type}"></h2>
+
+    <p class="availability"
+       th:text="${reservation.availabilityStatus} ? 'Available' : 'Unavailable'"
+       th:style="${reservation.availabilityStatus} ? 'background: green;' : 'background: red;'">
+    </p>
+
+    <p class="details">
+        Price: <strong th:text="${reservation.price}"></strong>
+    </p>
+
+    <p class="details">
+        Type: <strong th:text="${reservation.type}"></strong>
+    </p>
+    <img th:src="@{/spacephoto/{spaceId}(spaceId=${reservation.workspaceId})}" alt="Workspace Image">
+
+    <form th:action="@{/reservation/{spaceId}(spaceId=${reservation.workspaceId})}" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit" class="delete-btn">Cancel Reservation</button>
+    </form>
+
+</div>
+<a href="/availablespaces" class="back-link" style="background-color:black;">Back to Main Menu</a>
+</body>
+</html>
