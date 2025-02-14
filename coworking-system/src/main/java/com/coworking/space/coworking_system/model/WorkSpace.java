@@ -36,7 +36,6 @@ public class WorkSpace {
         this.workspaceId = workspaceId;
     }
 
-
     public User getAdmin() {
         return admin;
     }
