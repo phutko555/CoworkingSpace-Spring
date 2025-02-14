@@ -1,4 +1,5 @@
 package com.coworking.space.coworking_system.service;
+import com.coworking.space.coworking_system.Factory.WorkSpaceFactory;
 import com.coworking.space.coworking_system.model.User;
 import com.coworking.space.coworking_system.model.WorkSpace;
 import com.coworking.space.coworking_system.repository.UserRepo;
@@ -20,6 +21,9 @@ public class AdminService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private WorkSpaceFactory workSpaceFactory;
     @Transactional
     public void addWorkSpace(WorkSpace workSpace, MultipartFile file) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -35,9 +39,7 @@ public class AdminService {
                 workSpace.setAdmin(adminUser.orElse(null));
             }
         }
-        workSpace.setImageName(file.getOriginalFilename());
-        workSpace.setImageData(file.getBytes());
-        workSpace.setImageType(file.getContentType());
+       workSpace = workSpaceFactory.createWorkSpace(file);
         workSpaceRepo.save(workSpace);
     }
 
